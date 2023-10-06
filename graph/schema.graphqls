@@ -1,0 +1,101 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+type StudentInfo {
+   error:Boolean!
+  message:String!
+  roll_no: Int!
+  name: String!
+  dept: String!
+  year: Int!
+  mob_no: Int!
+  email: String!
+  dob: Int!
+
+}
+type Address{
+  error:Boolean!
+  message:String!
+  roll_no: Int!
+  city: String!
+  district: String!
+  pin: Int!
+  state: String!
+}
+type Marks{
+  error:Boolean!
+  message:String!
+  roll_no: Int!
+  physics: Int!
+  chemistry: Int!
+  mathematics: Int!
+}
+type Join{
+  error:Boolean!
+  message:String!
+  roll_no: Int!
+  name:String!
+  dept:String!
+  email:String!
+  city: String!
+  district: String!
+  pin: Int!
+  state: String!
+  physics: Int!
+  chemistry: Int!
+  mathematics: Int!
+}
+
+type Query {
+  students: [StudentInfo!]!
+  student(roll_no: Int!): StudentInfo
+  username(name: String): [StudentInfo]
+}
+
+input NewStudent {
+ roll_no: Int!
+  name: String!
+  dept: String!
+  year: Int!
+  mob_no: Int!
+  email: String!
+  dob: Int!
+}
+input UpdateStudent {
+ roll_no: Int!
+  name: String!
+  dept: String!
+  year: Int!
+  mob_no: Int!
+  email: String!
+  dob: Int!
+}
+input DeleteStudent {
+  roll_no: Int!
+}
+input AddAddress{
+  roll_no: Int!
+  city: String!
+  district: String!
+  pin: Int!
+  state: String!
+}
+input AddMarks{
+  roll_no: Int!
+  physics: Int!
+  chemistry: Int!
+  mathematics: Int!
+}
+
+type Mutation {
+  createStudent(input: NewStudent): StudentInfo!
+  updateStudent(input: UpdateStudent!): StudentInfo!
+  removeStudent(input: DeleteStudent!): String!
+  FetchStudent:[StudentInfo!]!
+  AddAddress(input:AddAddress):Address!
+  FetchAddress:[Address!]!
+  AddMarks(input:AddMarks):Marks!
+  FetchMarks:[Marks!]!
+  JoinStudent:[Join!]!
+}
