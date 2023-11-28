@@ -99,6 +99,7 @@ type ComplexityRoot struct {
 	}
 
 	StudentInfo struct {
+		Address func(childComplexity int) int
 		Dept    func(childComplexity int) int
 		Dob     func(childComplexity int) int
 		Email   func(childComplexity int) int
@@ -443,6 +444,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.Username(childComplexity, args["name"].(*string)), true
+
+	case "StudentInfo.address":
+		if e.complexity.StudentInfo.Address == nil {
+			break
+		}
+
+		return e.complexity.StudentInfo.Address(childComplexity), true
 
 	case "StudentInfo.dept":
 		if e.complexity.StudentInfo.Dept == nil {
@@ -1995,6 +2003,8 @@ func (ec *executionContext) fieldContext_Mutation_createStudent(ctx context.Cont
 				return ec.fieldContext_StudentInfo_email(ctx, field)
 			case "dob":
 				return ec.fieldContext_StudentInfo_dob(ctx, field)
+			case "address":
+				return ec.fieldContext_StudentInfo_address(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type StudentInfo", field.Name)
 		},
@@ -2070,6 +2080,8 @@ func (ec *executionContext) fieldContext_Mutation_updateStudent(ctx context.Cont
 				return ec.fieldContext_StudentInfo_email(ctx, field)
 			case "dob":
 				return ec.fieldContext_StudentInfo_dob(ctx, field)
+			case "address":
+				return ec.fieldContext_StudentInfo_address(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type StudentInfo", field.Name)
 		},
@@ -2200,6 +2212,8 @@ func (ec *executionContext) fieldContext_Mutation_FetchStudent(ctx context.Conte
 				return ec.fieldContext_StudentInfo_email(ctx, field)
 			case "dob":
 				return ec.fieldContext_StudentInfo_dob(ctx, field)
+			case "address":
+				return ec.fieldContext_StudentInfo_address(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type StudentInfo", field.Name)
 		},
@@ -2594,6 +2608,8 @@ func (ec *executionContext) fieldContext_Query_students(ctx context.Context, fie
 				return ec.fieldContext_StudentInfo_email(ctx, field)
 			case "dob":
 				return ec.fieldContext_StudentInfo_dob(ctx, field)
+			case "address":
+				return ec.fieldContext_StudentInfo_address(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type StudentInfo", field.Name)
 		},
@@ -2655,6 +2671,8 @@ func (ec *executionContext) fieldContext_Query_student(ctx context.Context, fiel
 				return ec.fieldContext_StudentInfo_email(ctx, field)
 			case "dob":
 				return ec.fieldContext_StudentInfo_dob(ctx, field)
+			case "address":
+				return ec.fieldContext_StudentInfo_address(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type StudentInfo", field.Name)
 		},
@@ -2727,6 +2745,8 @@ func (ec *executionContext) fieldContext_Query_username(ctx context.Context, fie
 				return ec.fieldContext_StudentInfo_email(ctx, field)
 			case "dob":
 				return ec.fieldContext_StudentInfo_dob(ctx, field)
+			case "address":
+				return ec.fieldContext_StudentInfo_address(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type StudentInfo", field.Name)
 		},
@@ -3265,6 +3285,66 @@ func (ec *executionContext) fieldContext_StudentInfo_dob(ctx context.Context, fi
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _StudentInfo_address(ctx context.Context, field graphql.CollectedField, obj *model.StudentInfo) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_StudentInfo_address(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Address, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Address)
+	fc.Result = res
+	return ec.marshalNAddress2ᚖnewPracticeᚋgraphᚋmodelᚐAddress(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_StudentInfo_address(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "StudentInfo",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "error":
+				return ec.fieldContext_Address_error(ctx, field)
+			case "message":
+				return ec.fieldContext_Address_message(ctx, field)
+			case "roll_no":
+				return ec.fieldContext_Address_roll_no(ctx, field)
+			case "city":
+				return ec.fieldContext_Address_city(ctx, field)
+			case "district":
+				return ec.fieldContext_Address_district(ctx, field)
+			case "pin":
+				return ec.fieldContext_Address_pin(ctx, field)
+			case "state":
+				return ec.fieldContext_Address_state(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Address", field.Name)
 		},
 	}
 	return fc, nil
@@ -5867,6 +5947,11 @@ func (ec *executionContext) _StudentInfo(ctx context.Context, sel ast.SelectionS
 			}
 		case "dob":
 			out.Values[i] = ec._StudentInfo_dob(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "address":
+			out.Values[i] = ec._StudentInfo_address(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}

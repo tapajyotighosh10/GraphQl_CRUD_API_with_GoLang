@@ -3,7 +3,7 @@
 # https://gqlgen.com/getting-started/
 
 type StudentInfo {
-   error:Boolean!
+   error:Boolean!    #   ! used for required fields
   message:String!
   roll_no: Int!
   name: String!
@@ -12,8 +12,9 @@ type StudentInfo {
   mob_no: Int!
   email: String!
   dob: Int!
-
+  address: Address!
 }
+
 type Address{
   error:Boolean!
   message:String!
@@ -23,6 +24,7 @@ type Address{
   pin: Int!
   state: String!
 }
+
 type Marks{
   error:Boolean!
   message:String!
@@ -48,9 +50,9 @@ type Join{
 }
 
 type Query {
-  students: [StudentInfo!]!
-  student(roll_no: Int!): StudentInfo
-  username(name: String): [StudentInfo]
+  students: [StudentInfo!]!     # here [] is for we return array of user
+  student(roll_no: Int!): StudentInfo   # here we are returning single user using roll_no and int as a parameter
+  username(name: String): [StudentInfo] # here we are returning single user using name and [] is there can be multiple user with the same name
 }
 
 input NewStudent {

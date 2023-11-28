@@ -67,15 +67,16 @@ type NewStudent struct {
 }
 
 type StudentInfo struct {
-	Error   bool   `json:"error"`
-	Message string `json:"message"`
-	RollNo  int    `json:"roll_no"`
-	Name    string `json:"name"`
-	Dept    string `json:"dept"`
-	Year    int    `json:"year"`
-	MobNo   int    `json:"mob_no"`
-	Email   string `json:"email"`
-	Dob     int    `json:"dob"`
+	Error   bool     `json:"error"`
+	Message string   `json:"message"`
+	RollNo  int      `json:"roll_no"`
+	Name    string   `json:"name"`
+	Dept    string   `json:"dept"`
+	Year    int      `json:"year"`
+	MobNo   int      `json:"mob_no"`
+	Email   string   `json:"email"`
+	Dob     int      `json:"dob"`
+	Address *Address `json:"address"`
 }
 
 type UpdateStudent struct {

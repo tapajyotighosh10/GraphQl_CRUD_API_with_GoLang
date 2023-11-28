@@ -21,13 +21,14 @@ func (r *mutationResolver) CreateStudent(ctx context.Context, input *model.NewSt
 	// panic(fmt.Errorf("not implemented: CreateStudent - createStudent"))
 	conn := postgres.Conn()
 	var res model.StudentInfo
-	log.Println("kmmmmmmmm88888888888888mmmmmmmmmmmm")
+	//log.Println("kmmmmmmmm88888888888888mmmmmmmmmmmm") // debugging
 	db, _ := sql.Open("postgres", conn)
 	defer db.Close()
-	sqlstatement := `INSERT INTO public.dataBase
-	(roll_no,name,dept,year,mob_no,email,dob)
-	VALUES($1, $2, $3, $4, $5 ,$6,$7
-	)RETURNING roll_no`
+	sqlstatement := `
+	INSERT INTO public.students (roll_no, name, dept, year, mob_no, email, dob)
+	VALUES ($1, $2, $3, $4, $5, $6, $7)
+	RETURNING roll_no
+`
 	// use returning clause
 	// log.Println("kmmmmmmmmmmmmmmmmmmmm", input.RollNo, input.Name, input.Dept, input.Year, input.MobNo, input.Email, input.Dob)
 	_, err := db.Exec(sqlstatement, input.RollNo, input.Name, input.Dept, input.Year, input.MobNo, input.Email, input.Dob)
@@ -52,9 +53,10 @@ func (r *mutationResolver) UpdateStudent(ctx context.Context, input model.Update
 	conn := postgres.Conn()
 	db, _ := sql.Open("postgres", conn)
 	defer db.Close()
-	sqlstatement := `UPDATE dataBase SET name =$1 ,dept= $2,year=$3,mob_no=$4,email=$5, dob=$6 WHERE roll_no=$7`
+	sqlstatement := ` UPDATE database students SET name =$1 ,dept= $2,year=$3,mob_no=$4,email=$5, dob=$6 WHERE roll_no=$7 `
 	log.Println(sqlstatement)
 	_, err := db.Exec(sqlstatement, input.Name, input.Dept, input.Year, input.MobNo, input.Email, input.Dob, input.RollNo)
+	
 	if err != nil {
 		fmt.Println("sql_err", err)
 		res.Error = true
@@ -255,7 +257,7 @@ func (r *mutationResolver) AddMarks(ctx context.Context, input *model.AddMarks) 
 	)`
 	// use returning clause
 	// log.Println("kmmmmmmmmmmmmmmmmmmmm", input.RollNo, input.Name, input.Dept, input.Year, input.MobNo, input.Email, input.Dob)
-	_, err := db.Exec(sqlstatement,input.RollNo, input.Physics, input.Chemistry, input.Mathematics)
+	_, err := db.Exec(sqlstatement, input.RollNo, input.Physics, input.Chemistry, input.Mathematics)
 	log.Println(err, ",,,,,,,,,,,,,,,,")
 	if err != nil {
 		res.Error = true
@@ -304,20 +306,17 @@ func (r *mutationResolver) FetchMarks(ctx context.Context) ([]*model.Marks, erro
 	f.SetCellValue("Sheet1", "C1", "Chemistry")
 	f.SetCellValue("Sheet1", "D1", "Mathematics")
 
-
 	for i, value := range user1 {
 		id := *&value.RollNo
 		phy := *&value.Physics
 		chem := *&value.Chemistry
-		math:= *&value.Mathematics
-	
+		math := *&value.Mathematics
 
 		a := strconv.Itoa(i + 2)
 		f.SetCellValue("Sheet1", ("A" + a), id)
 		f.SetCellValue("Sheet1", ("B" + a), phy)
-		f.SetCellValue("Sheet1", ("C" + a),chem)
+		f.SetCellValue("Sheet1", ("C" + a), chem)
 		f.SetCellValue("Sheet1", ("D" + a), math)
-	
 
 	}
 
@@ -352,7 +351,7 @@ func (r *mutationResolver) JoinStudent(ctx context.Context) ([]*model.Join, erro
 	}
 	for data.Next() {
 		var user model.Join
-		err = data.Scan(&user.RollNo, &user.Name, &user.Dept, &user.Email, &user.City, &user.District, &user.Pin, &user.State,&user.Physics,&user.Chemistry,&user.Mathematics)
+		err = data.Scan(&user.RollNo, &user.Name, &user.Dept, &user.Email, &user.City, &user.District, &user.Pin, &user.State, &user.Physics, &user.Chemistry, &user.Mathematics)
 		if err != nil {
 			fmt.Println("sql_err:", err)
 			return nil, err
@@ -381,9 +380,9 @@ func (r *mutationResolver) JoinStudent(ctx context.Context) ([]*model.Join, erro
 		district := *&value.District
 		pin := *&value.Pin
 		state := *&value.State
-		phy:=*&value.Physics
-		chem:=*&value.Chemistry
-		math:=*&value.Mathematics
+		phy := *&value.Physics
+		chem := *&value.Chemistry
+		math := *&value.Mathematics
 
 		a := strconv.Itoa(i + 2)
 		f.SetCellValue("Sheet1", ("A" + a), id)
