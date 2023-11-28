@@ -53,7 +53,7 @@ func (r *mutationResolver) UpdateStudent(ctx context.Context, input model.Update
 	conn := postgres.Conn()
 	db, _ := sql.Open("postgres", conn)
 	defer db.Close()
-	sqlstatement := ` UPDATE database students SET name =$1 ,dept= $2,year=$3,mob_no=$4,email=$5, dob=$6 WHERE roll_no=$7 `
+	sqlstatement := ` UPDATE database SET name =$1 ,dept= $2,year=$3,mob_no=$4,email=$5, dob=$6 WHERE roll_no=$7 `
 	log.Println(sqlstatement)
 	_, err := db.Exec(sqlstatement, input.Name, input.Dept, input.Year, input.MobNo, input.Email, input.Dob, input.RollNo)
 	
